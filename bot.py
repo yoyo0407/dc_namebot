@@ -32,13 +32,14 @@ async def on_message(message):
     await bot.process_commands(message)  # 讓指令繼續運行
 
 @bot.command()
-async def rks(ctx, game: str, level: float, score: int):
+async def rks(ctx, game: str, level: float, score: float):
     game = game.lower()  # 轉換成小寫，避免大小寫影響
     rks = 0  # 預設 Rank Score
 
     if game == "chu":
         thresholds = [
             (1009000, level + 2.15),
+            (1007500, level + 2.0),
             (1005000, level + 1.5),
             (1000000, level + 1.0),
             (990000, level + 0.6),
