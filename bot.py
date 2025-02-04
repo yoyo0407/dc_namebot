@@ -103,7 +103,7 @@ async def rks(ctx, game: str, level: float, score: float):
         await ctx.send("❌ 遊戲名稱錯誤，請輸入 chu, phi, arc 或 t3")
         return
 
-    await ctx.send(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score}\n🔢 Rank Score：{rks:.3f}")
+    await ctx.send(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score:.0f}\n🔢 Rank Score：{rks:.3f}")
 
 
 @bot.command()
