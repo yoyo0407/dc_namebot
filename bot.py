@@ -64,7 +64,7 @@ async def rks(ctx, game: str, level: float, score: float):
         if bestAcc < 0.7:
             rks = 0
         else:
-            rks = ((100 * bestAcc - 55) / 45) ** 2 * level
+            rks = ((bestAcc - 55) / 45) ** 2 * level
 
     elif game == "arc":
         thresholds = [
