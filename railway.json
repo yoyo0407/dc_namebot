@@ -1,0 +1,17 @@
+{
+  "services": {
+    "bot": {
+      "startCommand": "python bot.py",
+      "schedule": [
+        {
+          "cron": "0 2 * * *",
+          "command": "railway up"
+        },
+        {
+          "cron": "0 18 * * *",
+          "command": "railway down"
+        }
+      ]
+    }
+  }
+}
