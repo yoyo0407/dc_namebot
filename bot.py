@@ -35,7 +35,7 @@ async def on_message(message):
 async def rks(ctx, game: str, level: float, score: float):
     game = game.lower()  # 轉換成小寫，避免大小寫影響
     rks = 0  # 預設 Rank Score
-
+    score_str =f"{score:.0f}"
     if game == "chu":
         thresholds = [
             (1009000, level + 2.15),
@@ -59,7 +59,8 @@ async def rks(ctx, game: str, level: float, score: float):
             rks = 0
 
     elif game == "phi":
-        bestAcc = score / 10000000  # 假設滿分 10,000,000 轉換成 Acc 百分比
+        score_str =f"{score:.2f}"
+        bestAcc = score
         if bestAcc < 0.7:
             rks = 0
         else:
@@ -103,7 +104,7 @@ async def rks(ctx, game: str, level: float, score: float):
         await ctx.send("❌ 遊戲名稱錯誤，請輸入 chu, phi, arc 或 t3")
         return
 
-    await ctx.send(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score:.0f}\n🔢 Rank Score：{rks:.3f}")
+    await ctx.send(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
 
 @bot.command()
