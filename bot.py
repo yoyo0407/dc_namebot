@@ -128,7 +128,7 @@ async def god(ctx, *, text: str):
 async def dou(ctx: discord.Interaction, cp: int, bonus: int):
     x = 10 + int(cp / 45000)
     y = 100 + bonus
-    base = int(x * y / 100)
+    base = int(x * y / 1000)*10
     await ctx.response.send_message(f"你的豆森PT(一小格黃體)為：{base * 5}\n你的豆森PT(一小格藍體)為：{base}")
 
 # 確保 Token 被正確讀取
