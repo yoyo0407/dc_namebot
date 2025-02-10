@@ -90,23 +90,29 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
-@tree.command(name="god", description="熊貓人舉牌")
-async def god(ctx: discord.Interaction, *, name: str):
+@bot.tree.command(name="god", description="熊貓人舉牌")
+async def god(interaction: discord.Interaction, *, name: str):
     print(f"🛠️ 指令觸發：{name}")
-    text_length = get_text_width(name)
+    
+    # 計算文字長度
+    text_length = len(name)
+    
     img = Image.open("base.png")
     img = img.rotate(5, expand=True)
     draw = ImageDraw.Draw(img)
-    text_size = min(230, 690 / text_length)  # 計算文字大小
+    
+    # 計算文字大小
+    text_size = min(230, 690 / text_length)
+    
     # 字型 (請確保 `msjhbd.ttf` 存在)
     font_path = "msjhbd.ttf"
     try:
         font = ImageFont.truetype(font_path, text_size)
     except IOError:
-        await ctx.response.send_message("❌ 找不到字型檔案！請確認 `msjhbd.ttf` 存在。")
+        await interaction.response.send_message("❌ 找不到字型檔案！請確認 `msjhbd.ttf` 存在。")
         return
 
-    # ✅ 計算文字大小
+    # 計算文字範圍
     bbox = draw.textbbox((0, 0), name, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
@@ -116,12 +122,17 @@ async def god(ctx: discord.Interaction, *, name: str):
     y = (360 - text_height) // 2
 
     draw.text((x, y), name, fill="black", font=font)
+    
+    # 旋轉、縮放圖片
     img = img.rotate(-5)
     img = img.resize((96, 96))
+    
+    # 儲存圖片
     img_path = "nameplate.png"
     img.save(img_path)
 
-    await ctx.response.send_message(file=discord.File(img_path))(file=discord.File(img_path))
+    # 回傳圖片
+    await interaction.response.send_message(file=discord.File(img_path))
 
 @tree.command(name="豆森pt", description="計算豆森PT")
 async def dou(ctx: discord.Interaction, cp: int, bonus: int):
