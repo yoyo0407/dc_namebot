@@ -91,7 +91,7 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
 @tree.command(name="god", description="熊貓人舉牌")
-async def god(ctx: discord.interaction, *, name: str):
+async def god(ctx: discord.Interaction, *, name: str):
     print(f"🛠️ 指令觸發：{name}")
     text_length = get_text_width(name)
     img = Image.open("base.png")
