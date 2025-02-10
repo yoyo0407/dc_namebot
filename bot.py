@@ -97,8 +97,8 @@ async def rks(interaction: discord.Interaction, 遊戲名稱: str, 等級: float
 async def god(interaction: discord.Interaction, *, 名字: str):
     name = 名字
     print(f"🛠️ 指令觸發：{name}")
-    if not interaction.user.id == "Yoyo0407":  # 替換為你的用戶ID
-        await interaction.response.send_message("❌ 你無權使用這個指令！", ephemeral=True)
+    if not interaction.user.id == "yoyo0407":  # 替換為你的用戶ID
+        await interaction.response.send_message("只有Y^2(yoyo0407)可以使用這個指令！", ephemeral=True)
         return
     # 計算文字長度
     text_length = get_text_width(name)
