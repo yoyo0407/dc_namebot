@@ -96,7 +96,7 @@ async def rks(interaction: discord.Interaction, 遊戲名稱: str, 等級: float
 async def god(interaction: discord.Interaction, *, 名字: str):
     name = 名字
     print(f"🛠️ 指令觸發：{name}")
-    if not interaction.user.id == 857924514704785448:
+    if False: # interaction.user.id == 857924514704785448
         await interaction.response.send_message("只有Y^2(yoyo0407)可以使用這個指令！", ephemeral=True)
         return
     # 計算文字長度
@@ -158,7 +158,12 @@ async def dou(ctx: discord.Interaction, 綜合力: int, 活動倍率: int):
             break
     front_cp = (front_x-10)*45000
     front_bonus = front_y-100
-    await ctx.response.send_message(f"你的豆森PT(一小格黃體)為：{base * 5}\n你的豆森PT(一小格藍體)為：{base}\n要讓豆森pt變化你需要擁有{front_cp}綜合力或{front_bonus}倍活動倍率")
+    await ctx.response.send_message(
+    f"🌟 你的豆森PT (一小格黃體) 為：{base * 5}\n"
+    f"💙 你的豆森PT (一小格藍體) 為：{base}\n"
+    f"💪 你需要擁有 {front_cp} 綜合力 \n"
+    f"🔥 或 {front_bonus}% 活動倍率來讓豆森PT變化， "
+    )
 
 # 確保 Token 被正確讀取
 TOKEN = os.getenv("DISCORD_TOKEN")
