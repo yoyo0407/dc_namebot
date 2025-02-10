@@ -141,7 +141,7 @@ async def god(ctx, *, text: str):
     await ctx.send(file=discord.File(img_path))
 
 @bot.command()
-async def 豆森pt(ctx, cp: str, bonus: float):
+async def 豆森pt(ctx, cp: int, bonus: int):
     x = 10+int(cp/45000)
     y = 100 + bonus
     base = int(x*y/100)
