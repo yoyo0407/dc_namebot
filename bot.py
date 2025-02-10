@@ -26,12 +26,11 @@ tree = bot.tree  # 使用 app_commands 的指令管理
 
 @bot.event
 async def on_ready():
-    print(f'✅ Logged in as {bot.user}')
     try:
-        await tree.sync()
-        print("✅ 斜線指令已同步")
+        synced = await bot.tree.sync()  # 全域同步
+        print(f"✅ 已同步 {len(synced)} 個指令，全伺服器可用！")
     except Exception as e:
-        print(f"❌ 同步失敗: {e}")
+        print(f"❌ 同步指令失敗: {e}")
 
 @tree.command(name="rks", description="計算 Rank Score")
 async def rks(interaction: discord.Interaction, game: str, level: float, score: float):
@@ -92,7 +91,7 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
-@bot.command(name="god", description="熊貓人舉牌")
+@tree.command(name="god", description="熊貓人舉牌")
 async def god(ctx, *, text: str):
     print(f"🛠️ 指令觸發：{text}")
     text_length = get_text_width(text)
