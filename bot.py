@@ -157,12 +157,14 @@ async def dou(ctx: discord.Interaction, 綜合力: int, 活動倍率: int):
         if int(front_y * x / 1000)*10 > base:
             break
     front_cp = (front_x-10)*4.5
+    if front_cp == int(front_cp):
+        front_cp = int(front_cp)
     front_bonus = front_y-100
     await ctx.response.send_message(
-    f"🌟 你的豆森PT (一小格黃體) 為：{base * 5}\n"
-    f"💙 你的豆森PT (一小格藍體) 為：{base}\n"
+    f"🌟 你的豆森PT (一小格黃體) 為：{base * 5}pt\n"
+    f"💙 你的豆森PT (一小格藍體) 為：{base}pt\n"
     f"💪 你需要擁有 {front_cp}w 綜合力 \n"
-    f"🔥 或 {front_bonus}% 活動倍率來讓豆森PT變化， "
+    f"🔥 或 {front_bonus}% 活動倍率來讓豆森PT變化 "
     )
 
 # 確保 Token 被正確讀取
