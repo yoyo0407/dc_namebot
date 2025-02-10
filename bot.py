@@ -26,11 +26,11 @@ tree = bot.tree  # 使用 app_commands 的指令管理
 
 @bot.event
 async def on_ready():
-    try:
-        synced = await bot.tree.sync()  # 全域同步
-        print(f"✅ 已同步 {len(synced)} 個指令，全伺服器可用！")
-    except Exception as e:
-        print(f"❌ 同步指令失敗: {e}")
+    bot.tree.copy_global_to(guild=None)  # 確保所有伺服器同步
+    await bot.tree.sync(guild=None)  # 全局同步
+    print(f'✅ 已同步 {len(bot.tree.get_commands())} 個指令，全伺服器 & 私訊可用！')
+    print(f'✅ Logged in as {bot.user}')
+
 
 @tree.command(name="rks", description="計算 Rank Score")
 async def rks(interaction: discord.Interaction, game: str, level: float, score: float):
