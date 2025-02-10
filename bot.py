@@ -31,7 +31,7 @@ async def on_ready():
     print(f'✅ Logged in as {bot.user}')
 
 
-@tree.command(name="rks", description="計算 Rank Score")
+@tree.command(name="rks", description="計算 Rank Score",guild_only=False)
 async def rks(interaction: discord.Interaction, game: str, level: float, score: float):
     game = game.lower()
     rks = 0
@@ -90,7 +90,7 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
-@bot.tree.command(name="god", description="熊貓人舉牌")
+@bot.tree.command(name="god", description="熊貓人舉牌",guild_only=False)
 async def god(interaction: discord.Interaction, *, name: str):
     print(f"🛠️ 指令觸發：{name}")
     
@@ -134,7 +134,7 @@ async def god(interaction: discord.Interaction, *, name: str):
     # 回傳圖片
     await interaction.response.send_message(file=discord.File(img_path))
 
-@tree.command(name="豆森pt", description="計算豆森PT")
+@tree.command(name="豆森pt", description="計算豆森PT",guild_only=False)
 async def dou(ctx: discord.Interaction, cp: int, bonus: int):
     x = 10 + int(cp / 45000)
     y = 100 + bonus
