@@ -26,8 +26,7 @@ tree = bot.tree  # 使用 app_commands 的指令管理
 
 @bot.event
 async def on_ready():
-    bot.tree.copy_global_to(guild=None)  # 確保所有伺服器同步
-    await bot.tree.sync(guild=None)  # 全局同步
+    await bot.tree.sync()  # ✅ 確保全伺服器同步指令
     print(f'✅ 已同步 {len(bot.tree.get_commands())} 個指令，全伺服器 & 私訊可用！')
     print(f'✅ Logged in as {bot.user}')
 
@@ -92,7 +91,7 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
 @tree.command(name="god", description="熊貓人舉牌")
-async def god(ctx, *, name: str):
+async def god(ctx: discord.interaction, *, name: str):
     print(f"🛠️ 指令觸發：{name}")
     text_length = get_text_width(name)
     img = Image.open("base.png")
@@ -122,7 +121,7 @@ async def god(ctx, *, name: str):
     img_path = "nameplate.png"
     img.save(img_path)
 
-    await ctx.send(file=discord.File(img_path))
+    await ctx.response.send_message(file=discord.File(img_path))(file=discord.File(img_path))
 
 @tree.command(name="豆森pt", description="計算豆森PT")
 async def dou(ctx: discord.Interaction, cp: int, bonus: int):
