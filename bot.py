@@ -97,7 +97,7 @@ async def god(interaction: discord.Interaction, *, 名字: str):
     name = 名字
     print(f"🛠️ 指令觸發：{name}")
     if "Y" in name or "y" in name: 
-        name = interaction.user.name
+        name = interaction.user.display_name
     # 計算文字長度
     text_length = get_text_width(name)
     
