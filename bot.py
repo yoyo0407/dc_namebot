@@ -32,7 +32,10 @@ async def on_ready():
 
 
 @tree.command(name="rks", description="計算 Rank Score")
-async def rks(interaction: discord.Interaction, game: str, level: float, score: float):
+async def rks(interaction: discord.Interaction, 遊戲名稱: str, 等級: float, 分數: float):
+    game = 遊戲名稱
+    level = 等級
+    score = 分數
     game = game.lower()
     rks = 0
     score_str = f"{score:.0f}"
@@ -91,10 +94,12 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
     await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
 @bot.tree.command(name="god", description="熊貓人舉牌")
-@commands.is_owner()
-async def god(interaction: discord.Interaction, *, name: str):
+async def god(interaction: discord.Interaction, *, 名字: str):
+    name = 名字
     print(f"🛠️ 指令觸發：{name}")
-    
+    if not interaction.user.id == "Yoyo0407":  # 替換為你的用戶ID
+        await interaction.response.send_message("❌ 你無權使用這個指令！", ephemeral=True)
+        return
     # 計算文字長度
     text_length = get_text_width(name)
     
@@ -136,7 +141,9 @@ async def god(interaction: discord.Interaction, *, name: str):
     await interaction.response.send_message(file=discord.File(img_path))
 
 @tree.command(name="豆森pt", description="計算豆森PT")
-async def dou(ctx: discord.Interaction, cp: int, bonus: int):
+async def dou(ctx: discord.Interaction, 綜合力: int, 活動倍率: int):
+    cp = 綜合力
+    bonus = 活動倍率
     x = 10 + int(cp / 45000)
     y = 100 + bonus
     base = int(x * y / 1000)*10
