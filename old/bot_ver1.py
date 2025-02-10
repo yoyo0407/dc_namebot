@@ -1,6 +1,5 @@
 import os
 import discord
-from discord import app_commands
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 from dotenv import load_dotenv
@@ -12,57 +11,71 @@ def get_text_width(text: str) -> int:
         if unicodedata.east_asian_width(char) in ["W", "F"]:
             width += 1.5
         else:
-            width += 1
+            width += 1  # 英文算 1 格
     return width
 
 # 載入 .env
-load_dotenv()
+load_dotenv() 
 
-# 設定 intents
+# 設定 intents，確保可以讀取訊息
 intents = discord.Intents.default()
-intents.message_content = True
+intents.message_content = True  # 允許讀取訊息
 bot = commands.Bot(command_prefix="%", intents=intents)
-tree = bot.tree  # 使用 app_commands 的指令管理
 
 @bot.event
 async def on_ready():
     print(f'✅ Logged in as {bot.user}')
-    try:
-        await tree.sync()
-        print("✅ 斜線指令已同步")
-    except Exception as e:
-        print(f"❌ 同步失敗: {e}")
 
-@tree.command(name="rks", description="計算 Rank Score")
-async def rks(interaction: discord.Interaction, game: str, level: float, score: float):
-    game = game.lower()
-    rks = 0
-    score_str = f"{score:.0f}"
-    
+@bot.event
+async def on_message(message):
+    print(f"📩 收到訊息：{message.content}")  # 確保機器人有收到訊息
+    await bot.process_commands(message)  # 讓指令繼續運行
+
+@bot.command()
+async def rks(ctx, game: str, level: float, score: float):
+    game = game.lower()  # 轉換成小寫，避免大小寫影響
+    rks = 0  # 預設 Rank Score
+    score_str =f"{score:.0f}"
     if game == "chu":
         thresholds = [
-            (1009000, level + 2.15), (1007500, level + 2.0), (1005000, level + 1.5),
-            (1000000, level + 1.0), (990000, level + 0.6), (975000, level),
-            (925000, level - 3.0), (900000, level - 5.0), (800000, (level - 5.0) / 2)
+            (1009000, level + 2.15),
+            (1007500, level + 2.0),
+            (1005000, level + 1.5),
+            (1000000, level + 1.0),
+            (990000, level + 0.6),
+            (975000, level),
+            (925000, level - 3.0),
+            (900000, level - 5.0),
+            (800000, (level - 5.0) / 2),
         ]
         for i in range(len(thresholds) - 1):
             if thresholds[i + 1][0] <= score < thresholds[i][0]:
+                # 線性內插
                 x0, y0 = thresholds[i]
                 x1, y1 = thresholds[i + 1]
                 rks = y1 + (y0 - y1) * (score - x1) / (x0 - x1)
                 break
         if score < 800000:
             rks = 0
-    
+
     elif game == "phi":
-        score_str = f"{score:.2f}"
-        rks = 0 if score < 0.7 else ((score - 55) / 45) ** 2 * level
-    
+        score_str =f"{score:.2f}"
+        bestAcc = score
+        if bestAcc < 0.7:
+            rks = 0
+        else:
+            rks = ((bestAcc - 55) / 45) ** 2 * level
+
     elif game == "arc":
         thresholds = [
-            (10000000, level + 2.00), (9950000, level + 1.75), (9900000, level + 1.50),
-            (9800000, level + 1.00), (9500000, level), (9200000, level - 1.00),
-            (8900000, level - 2.00), (8600000, level - 3.00)
+            (10000000, level + 2.00),
+            (9950000, level + 1.75),
+            (9900000, level + 1.50),
+            (9800000, level + 1.00),
+            (9500000, level),
+            (9200000, level - 1.00),
+            (8900000, level - 2.00),
+            (8600000, level - 3.00),
         ]
         for i in range(len(thresholds) - 1):
             if thresholds[i + 1][0] <= score < thresholds[i][0]:
@@ -72,7 +85,7 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
                 break
         if score < 8600000:
             rks = 0
-    
+
     elif game == "t3":
         if score < 800000:
             rks = 0
@@ -86,13 +99,15 @@ async def rks(interaction: discord.Interaction, game: str, level: float, score: 
             rks = (level + 1.5 + (score - 995000) / 8000) / 34 * 40
         else:
             rks = (level + 2 + (score - 999000) / 10000) / 34 * 40
-    else:
-        await interaction.response.send_message("❌ 遊戲名稱錯誤，請輸入 chu, phi, arc 或 t3")
-        return
-    
-    await interaction.response.send_message(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
 
-@bot.command(name="god", description="熊貓人舉牌")
+    else:
+        await ctx.send("❌ 遊戲名稱錯誤，請輸入 chu, phi, arc 或 t3")
+        return
+
+    await ctx.send(f"📊 遊戲：{game.upper()}\n🎚 等級：{level}\n🏆 分數：{score_str}\n🔢 Rank Score：{rks:.3f}")
+
+
+@bot.command()
 async def god(ctx, *, text: str):
     print(f"🛠️ 指令觸發：{text}")
     text_length = get_text_width(text)
@@ -125,12 +140,13 @@ async def god(ctx, *, text: str):
 
     await ctx.send(file=discord.File(img_path))
 
-@tree.command(name="豆森pt", description="計算豆森PT")
-async def dou(ctx: discord.Interaction, cp: int, bonus: int):
-    x = 10 + int(cp / 45000)
+@bot.command()
+async def 豆森pt(ctx, cp: int, bonus: int):
+    x = 10+int(cp/45000)
     y = 100 + bonus
-    base = int(x * y / 100)
-    await ctx.response.send_message(f"你的豆森PT(一小格黃體)為：{base * 5}\n你的豆森PT(一小格藍體)為：{base}")
+    base = int(x*y/100)
+    await ctx.send(f"你的豆森PT(一小格黃體)為：{base*5}\n你的豆森PT(一小格藍體)為：{base}")
+    
 
 # 確保 Token 被正確讀取
 TOKEN = os.getenv("DISCORD_TOKEN")
